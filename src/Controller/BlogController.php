@@ -12,27 +12,21 @@ namespace App\Controller;
 use App\Service\Greeting;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class BlogController
+class BlogController extends AbstractController
 {
 
 
     private $greeting;
-    /**
-     * @var \Twig_Environment
-     */
-    private $twig;
 
     /**
      * BlogController constructor.
      */
-    public function __construct(Greeting $greeting, \Twig_Environment $twig)
+    public function __construct(Greeting $greeting)
     {
         $this->greeting = $greeting;
 
-        $this->twig = $twig;
     }
 
     /**
@@ -43,7 +37,6 @@ class BlogController
         $name = $request->get('name');
         $message = $name !== null ? $this->greeting->greet($name) : '';
 
-        $html = $this->twig->render('base.html.twig', [ 'message' => $message  ]);
-        return new Response($html);
+        return $this->render('base.html.twig', [ 'message' => $message  ]);
     }
 }

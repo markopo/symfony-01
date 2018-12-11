@@ -66,7 +66,9 @@ class BlogController extends AbstractController
         $posts = $this->session->get('posts');
         $posts[uniqid()] = [
             'title' => 'A random title ' . rand(1, 5000),
-            'text' => 'Some random text nr: '. rand(1, 5000)
+            'text' => 'Some random text nr: '. rand(1, 5000),
+            'date' => new \DateTime(),
+            'price' => rand(100.3939, 39399393.2929929)
         ];
 
         $this->session->set('posts', $posts);

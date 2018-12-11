@@ -7,8 +7,10 @@
         <h2>Post</h2>
         <div>
             <div>
-                <h3><a href="{{ path('blog_show', { 'id': id }) }}" >{{ id }} . {{ post.title }} </a></h3>
+                <h3><a href="{{ path('blog_show', { 'id': id }) }}" > <em>{{ id|lower }}</em> - {{ post.title|upper }} </a></h3>
                 <p>{{  post.text }}</p>
+                <p>Date: {{ post.date|date('Y-m-d h:i:s') }}</p>
+                <p>Price {{ post.price|price }}</p>
             </div>
         </div>
     </div>

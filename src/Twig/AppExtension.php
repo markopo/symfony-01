@@ -19,12 +19,20 @@ class AppExtension extends AbstractExtension
     {
 
         return [
-            new TwigFilter('price', [ $this, 'priceFilter' ])
+            new TwigFilter('price', [ $this, 'priceFilter' ]),
+            new TwigFilter('bingo', [ $this, 'bingoFilter' ])
         ];
     }
 
     public function priceFilter($number) {
         return '$'.number_format($number, 2, '.', ',');
     }
+
+    public function bingoFilter($str){
+        return "BINGO $str!";
+    }
+
+
+
 
 }

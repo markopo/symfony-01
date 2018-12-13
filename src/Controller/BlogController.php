@@ -55,7 +55,6 @@ class BlogController extends AbstractController
      */
     public function index(Request $request) {
 
-
         return $this->render('blog/index.html.twig', [ 'posts' => $this->session->get('posts') ]);
     }
 

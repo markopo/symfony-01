@@ -6,6 +6,9 @@
 {% block body %}
     <div>
         <h3>Micropost index</h3>
+        <small class="d-block text-right mt-3">
+            <a href="{{ path('micro_post_add') }}">All updates</a>
+        </small>
         <div>
         {% for mp in microposts %}
             <div class="media text-muted pt-3">

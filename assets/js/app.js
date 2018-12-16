@@ -21,8 +21,8 @@ const hw = require('./modules/functions');
     //    $('body').prepend('<h1>'+greet('MARKO POKKO')+'</h1>');
 
       const msg = hw.helloWorld();
-      $("h2").html(msg);
+    //  $("h2").html(msg);
 
 
-     $('body').css('background', '#0CC');
+    // $('body').css('background', '#0CC');
  });

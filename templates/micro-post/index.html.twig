@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Micropost index!{% endblock %}
+
+
+{% block body %}
+    <div>
+        <h3>Micropost index</h3>
+        <div>
+        {% for mp in microposts %}
+            <div class="media text-muted pt-3">
+                <img data-src="holder.js/32x32?text=MJ&bg=e83e8c&fg=fff&size=8" alt="" class="mr-2 rounded">
+                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                    <span class="d-block"><small>{{ mp.time|date('Y-m-d') }}</small></span>
+                    {{ mp.text }}
+                </p>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+{%  endblock %}

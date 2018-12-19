@@ -19,7 +19,7 @@ Encore
      */
     // ,
 
-    .addEntry('js/app', [  './assets/js/app.js', './node_modules/bootstrap/dist/js/bootstrap.js' ])
+    .addEntry('js/app', [  './assets/js/app.js', './assets/ts/main.js', './node_modules/bootstrap/dist/js/bootstrap.js' ])
 
     .addEntry('js/blog_index', [ './assets/js/page/blog_index.js' ])
     //.addEntry('page2', './assets/js/page2.js')
@@ -45,10 +45,10 @@ Encore
     .enableVersioning(Encore.isProduction())
 
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    // .enableSassLoader()
 
     // uncomment if you use TypeScript
-    //.enableTypeScriptLoader()
+  //  .enableTypeScriptLoader()
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()

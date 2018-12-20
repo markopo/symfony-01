@@ -1,9 +1,9 @@
+"use strict";
+exports.__esModule = true;
 var $ = require('jquery');
-function hello(name) {
-    return "Hello " + name + "!";
-}
+var Utilities_1 = require("./Utilities");
 $(document).ready(function () {
     console.log("TS is awesome!");
-    var msg = hello("Marko");
+    var msg = Utilities_1.UtilFunctions.hello("Marko");
     console.log(msg);
 });

@@ -5,6 +5,14 @@
 
 {% block body %}
     <div>
+        <div>
+            {% for message in app.flashes('notice') %}
+                <div class="alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+
         <h3>Micropost index</h3>
         <small class="d-block text-right mt-3">
             <a href="{{ path('micro_post_add') }}">All updates</a>

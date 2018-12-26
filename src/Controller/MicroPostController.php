@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\Date;
 
@@ -42,18 +43,23 @@ class MicroPostController extends AbstractController
      * @var RouterInterface
      */
     private $router;
+    /**
+     * @var FlashBagInterface
+     */
+    private $flashBag;
 
 
     /**
      * MicroPostController constructor.
      * @param MicroPostRepository $microPostRepository
      */
-    public function __construct(MicroPostRepository $microPostRepository, FormFactoryInterface $formFactory, EntityManagerInterface $entityManager, RouterInterface $router)
+    public function __construct(MicroPostRepository $microPostRepository, FormFactoryInterface $formFactory, EntityManagerInterface $entityManager, RouterInterface $router, FlashBagInterface $flashBag)
     {
         $this->microPostRepository = $microPostRepository;
         $this->formFactory = $formFactory;
         $this->entityManager = $entityManager;
         $this->router = $router;
+        $this->flashBag = $flashBag;
     }
 
     /**
@@ -63,6 +69,18 @@ class MicroPostController extends AbstractController
         $microPosts = $this->microPostRepository->findBy([], [ 'time' => 'DESC' ]);
 
         return $this->render('micro-post/index.html.twig', [ 'microposts' => $microPosts ]);
+    }
+
+    /**
+     * @Route("/delete/{id}", name="micro_post_delete")
+     */
+    public function delete(MicroPost $microPost){
+        $this->entityManager->remove($microPost);
+        $this->entityManager->flush();
+
+        $this->flashBag->add('notice', 'Micro post was deleted.');
+
+        return new RedirectResponse($this->router->generate('micro_post_index'));
     }
 
     /**

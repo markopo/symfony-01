@@ -33,3 +33,15 @@
 
 
 {%  endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        (function () {
+            console.log("login!");
+        })();
+    </script>
+
+{% endblock %}

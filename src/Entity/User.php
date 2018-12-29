@@ -122,7 +122,7 @@ class User implements UserInterface, \Serializable
         $this->plainPassword = $plainPassword;
     }
 
-    
+
 
     /**
      * Returns the roles granted to the user.

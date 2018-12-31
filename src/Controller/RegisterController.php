@@ -23,14 +23,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class RegisterController extends AbstractController
 {
 
-
-    /**
-     * @var UserPasswordEncoderInterface
-     */
     private $passwordEncoder;
-    /**
-     * @var EntityManagerInterface
-     */
+
     private $entityManager;
 
     private $formFactory;
@@ -68,8 +62,6 @@ class RegisterController extends AbstractController
 
         $formView = $form->createView();
         return $this->render('register/register.html.twig', [ 'title' => 'Register a new User', 'form' => $formView ]);
-
-
     }
 
 }

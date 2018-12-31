@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -39,6 +40,7 @@ class User implements UserInterface, \Serializable
      */
     private $plainPassword;
 
+
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
@@ -52,6 +54,21 @@ class User implements UserInterface, \Serializable
      * @Assert\Email()
      */
     private $email;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MicroPost", mappedBy="user")
+     */
+    private $posts;
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->posts = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -105,6 +122,15 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPosts()
+    {
+        return $this->posts;
+    }
+
 
     /**
      * @return mixed

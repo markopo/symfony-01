@@ -32,9 +32,9 @@ class AppFixtures extends Fixture
 
         $this->faker = Faker\Factory::create();
 
-        $this->loadMicroPosts($manager);
-
         $this->loadUsers($manager);
+
+        $this->loadMicroPosts($manager);
 
         $manager->flush();
     }
@@ -44,10 +44,15 @@ class AppFixtures extends Fixture
             for($i=0;$i<20;$i++) {
 
                 $user = new User();
+                $fullName = $this->faker->name;
                 $user->setEmail($this->faker->email);
                 $user->setUsername($this->faker->userName);
-                $user->setFullName($this->faker->name);
+                $user->setFullName($fullName);
                 $user->setPassword($this->passwordEncoder->encodePassword($user, 'abc123'));
+
+                if($i == 0) {
+                    $this->addReference('user_1', $user);
+                }
 
                 $manager->persist($user);
             }
@@ -61,6 +66,10 @@ class AppFixtures extends Fixture
             $mp = new MicroPost();
             $mp->setText($this->faker->paragraph(rand(5, 30)));
             $mp->setTime(new \DateTime($this->randomDateStr()));
+
+            $user = $this->getReference('user_1');
+            $mp->setUser($user);
+
             $manager->persist($mp);
         }
 

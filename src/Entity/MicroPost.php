@@ -80,9 +80,10 @@ class MicroPost
         return $this;
     }
 
-
-
-
+    public function __toString()
+    {
+        return 'micropost_'.$this->getId();
+    }
 
 
 }

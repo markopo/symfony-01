@@ -1,13 +1,17 @@
+
+{% set initials = mp.user.fullname|split(' ') %}
 <div style="padding-top:15px;" class="">
     <small class="d-block text-right mt-3">
         <a href="{{ path('micro_post_edit', { 'id': mp.id }) }}">Edit</a>
         <a style="color:red;" href="{{ path('micro_post_delete', { 'id': mp.id }) }}">Delete</a>
     </small>
     <div class="media text-muted pt-3">
-        <img data-src="holder.js/32x32?text=MJ&bg=e83e8c&fg=fff&size=8" alt="" class="mr-2 rounded">
+        <img src="https://via.placeholder.com/32x32/e83e8c/fff?text={{ attribute(initials, 0)|first }}{{ attribute(initials, 1)|first }}" title="{{ mp.user.fullname }}" alt="{{ mp.user.fullname }}" class="mr-2 rounded">
         <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
             <span class="d-block"><a href="{{ path('micro_post_post', { 'id' : mp.id }) }}" ><small>{{ mp.time|date('Y-m-d') }}</small></a>
-                <span style="float:right;" class="small" >Created by: <i>{{ mp.user.getFullName() }}</i></span>
+                <span style="float:right;" class="small" >
+                    Created by: <b>{{ mp.user.fullname }}</b>
+                </span>
             </span>
         {{ mp.text }}
         </p>

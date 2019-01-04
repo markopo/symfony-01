@@ -17,6 +17,7 @@ class AppFixtures extends Fixture
      */
     private $passwordEncoder;
 
+    private $numberOfUsers = 50;
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -41,33 +42,34 @@ class AppFixtures extends Fixture
 
     private function loadUsers(ObjectManager $manager): void {
 
-            for($i=0;$i<20;$i++) {
+            for($i=0;$i<$this->numberOfUsers;$i++) {
 
                 $user = new User();
-                $fullName = $this->faker->name;
-                $user->setEmail($this->faker->email);
-                $user->setUsername($this->faker->userName);
+                $fName = $this->faker->firstName;
+                $lName = $this->faker->lastName;
+                $fullName = $fName . ' ' . $lName;
+                $userName = mb_strtolower($fName);
+                $email = mb_strtolower($fName.'_'.$lName).'@gmail.com';
+
+                $user->setEmail($email);
+                $user->setUsername($userName);
                 $user->setFullName($fullName);
                 $user->setPassword($this->passwordEncoder->encodePassword($user, 'abc123'));
 
-                if($i == 0) {
-                    $this->addReference('user_1', $user);
-                }
+                $this->addReference("user_{$i}", $user);
 
                 $manager->persist($user);
             }
-
-
     }
 
     private function loadMicroPosts(ObjectManager $manager): void {
 
-        for($i=0;$i< 50;$i++){
+        for($i=0;$i< 200;$i++){
             $mp = new MicroPost();
             $mp->setText($this->faker->paragraph(rand(5, 30)));
             $mp->setTime(new \DateTime($this->randomDateStr()));
 
-            $user = $this->getReference('user_1');
+            $user = $this->getReference($this->randomUserStr());
             $mp->setUser($user);
 
             $manager->persist($mp);
@@ -75,9 +77,15 @@ class AppFixtures extends Fixture
 
     }
 
+    private function randomUserStr(): string {
+        $random = rand(0, $this->numberOfUsers-1);
+        return "user_{$random}";
+    }
+
     private function randomDateStr(): string {
+        $year = rand(10, 18);
         $month = rand(1, 12);
         $day = rand(1, 28);
-        return "2018-$month-$day";
+        return "20$year-$month-$day";
     }
 }

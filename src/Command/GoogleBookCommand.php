@@ -20,12 +20,14 @@ class GoogleBookCommand extends Command
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->client = new Client();
     }
 
     public function getRequest($url){
 
-        parent::__construct();
+
 
         $req = $this->client->getClient()->request('GET', $url);
         $message = $req->getBody()->getContents();

@@ -2,8 +2,14 @@
 {% set initials = mp.user.fullname|split(' ') %}
 <div style="padding-top:15px;" class="">
     <small class="d-block text-right mt-3">
-        <a href="{{ path('micro_post_edit', { 'id': mp.id }) }}">Edit</a>
-        <a style="color:red;" href="{{ path('micro_post_delete', { 'id': mp.id }) }}">Delete</a>
+        {%  if is_granted('edit', mp) %}
+            <a href="{{ path('micro_post_edit', { 'id': mp.id }) }}">Edit</a>
+        {% endif %}
+
+        {% if is_granted('delete', mp) %}
+            <a style="color:red;" href="{{ path('micro_post_delete', { 'id': mp.id }) }}">Delete</a>
+        {% endif %}
+
     </small>
     <div class="media text-muted pt-3">
         <img src="https://via.placeholder.com/32x32/e83e8c/fff?text={{ attribute(initials, 0)|first }}{{ attribute(initials, 1)|first }}" title="{{ mp.user.fullname }}" alt="{{ mp.user.fullname }}" class="mr-2 rounded">

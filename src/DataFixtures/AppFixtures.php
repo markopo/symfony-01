@@ -78,7 +78,7 @@ class AppFixtures extends Fixture
         for($i=0;$i< 300;$i++){
             $mp = new MicroPost();
             $mp->setText($this->faker->paragraph(rand(5, 30)));
-            $now = new \DateTime($this->lastYear());
+            $now = new \DateTime($this->threePrevYear());
             $dayadd = $i * 3;
             $now->add(new \DateInterval("P{$dayadd}D"));
             $mp->setTime($now);
@@ -96,7 +96,7 @@ class AppFixtures extends Fixture
         return "user_{$random}";
     }
 
-    private function lastYear(): string {
+    private function threePrevYear(): string {
         $year = date("Y",strtotime("-3 year"));
         return "{$year}-01-01";
     }

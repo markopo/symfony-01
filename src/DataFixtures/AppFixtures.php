@@ -7,6 +7,7 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Faker;
+use function Sodium\add;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
@@ -17,7 +18,7 @@ class AppFixtures extends Fixture
      */
     private $passwordEncoder;
 
-    private $numberOfUsers = 50;
+    private $numberOfUsers = 20;
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -54,7 +55,17 @@ class AppFixtures extends Fixture
                 $user->setEmail($email);
                 $user->setUsername($userName);
                 $user->setFullName($fullName);
-                $user->setPassword($this->passwordEncoder->encodePassword($user, 'abc123'));
+
+                $roles = [ User::ROLE_USER ];
+                $passWord = 'abc123';
+
+                if($i === 0){
+                    $roles = [ User::ROLE_ADMIN ];
+                    $passWord = 'admin123';
+                }
+
+                $user->setRoles($roles);
+                $user->setPassword($this->passwordEncoder->encodePassword($user, $passWord));
 
                 $this->addReference("user_{$i}", $user);
 
@@ -64,10 +75,13 @@ class AppFixtures extends Fixture
 
     private function loadMicroPosts(ObjectManager $manager): void {
 
-        for($i=0;$i< 200;$i++){
+        for($i=0;$i< 300;$i++){
             $mp = new MicroPost();
             $mp->setText($this->faker->paragraph(rand(5, 30)));
-            $mp->setTime(new \DateTime($this->randomDateStr()));
+            $now = new \DateTime($this->lastYear());
+            $dayadd = $i * 3;
+            $now->add(new \DateInterval("P{$dayadd}D"));
+            $mp->setTime($now);
 
             $user = $this->getReference($this->randomUserStr());
             $mp->setUser($user);
@@ -80,6 +94,11 @@ class AppFixtures extends Fixture
     private function randomUserStr(): string {
         $random = rand(0, $this->numberOfUsers-1);
         return "user_{$random}";
+    }
+
+    private function lastYear(): string {
+        $year = date("Y",strtotime("-3 year"));
+        return "{$year}-01-01";
     }
 
     private function randomDateStr(): string {

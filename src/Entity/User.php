@@ -15,6 +15,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface, \Serializable
 {
+    const ROLE_USER = 'ROLE_USER';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -47,6 +50,12 @@ class User implements UserInterface, \Serializable
      * @Assert\Length(min=4, max=50)
      */
     private $fullName;
+
+    /**
+     * @var array
+     * @ORM\Column(type="simple_array")
+     */
+    private $roles;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
@@ -166,8 +175,18 @@ class User implements UserInterface, \Serializable
      */
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return $this->roles;
     }
+
+    /**
+     * @param array $roles
+     */
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
+    }
+
+
 
     /**
      * Returns the salt that was originally used to encode the password.

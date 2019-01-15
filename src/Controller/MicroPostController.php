@@ -146,8 +146,15 @@ class MicroPostController extends AbstractController
      */
     public function add(Request $request) {
 
+        $user = $this->getUser();
+
+        if($user === null){
+            throw new AccessDeniedException('User not logged in!');
+        }
+
         $microPost = new MicroPost();
         $microPost->setTime(new \DateTime());
+        $microPost->setUser($user);
 
         $form = $this->formFactory->create(MicroPostType::class, $microPost);
         $form->handleRequest($request);

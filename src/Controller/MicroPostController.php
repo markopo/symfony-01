@@ -24,6 +24,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Validator\Constraints\Date;
+use App\Entity\User;
 
 /**
  * @Route("/micro-post")
@@ -179,6 +180,14 @@ class MicroPostController extends AbstractController
        $mp = $this->microPostRepository->find($id);
 
        return $this->render('micro-post/post.html.twig', [ 'id' => $id, 'mp' => $mp ]);
+    }
+
+    /**
+     * @Route("/user/{username}", name="micro_post_user")
+     */
+    public function userPosts(User $userWithPosts) {
+
+        return $this->render('micro-post/index.html.twig', [ 'microposts' => $userWithPosts->getPosts() ]);
     }
 
 

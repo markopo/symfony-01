@@ -1,17 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: markopoikkimaki
- * Date: 2018-12-29
- * Time: 11:32
- */
 
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Event\UserRegisterEvent;
 use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,12 +27,22 @@ class RegisterController extends AbstractController
 
     private $router;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, FormFactoryInterface $formFactory, RouterInterface $router)
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder,
+                                EntityManagerInterface $entityManager,
+                                FormFactoryInterface $formFactory,
+                                RouterInterface $router,
+                                EventDispatcherInterface $eventDispatcher)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->entityManager = $entityManager;
         $this->formFactory = $formFactory;
         $this->router = $router;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
 
@@ -56,7 +62,10 @@ class RegisterController extends AbstractController
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            $indexRoute = $this->router->generate('micro_post_index');
+            $userRegisterEvent = new UserRegisterEvent($user);
+            $this->eventDispatcher->dispatch(UserRegisterEvent::NAME, $userRegisterEvent);
+
+            $indexRoute = $this->router->generate('books');
             return new RedirectResponse($indexRoute);
         }
 

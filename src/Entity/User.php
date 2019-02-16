@@ -64,11 +64,37 @@ class User implements UserInterface, \Serializable
      */
     private $email;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $description;
+
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\MicroPost", mappedBy="user")
      */
-    private $posts;
+   // private $posts;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="following")
+     */
+  //  private $followers;
+
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="followers")
+     * @ORM\JoinTable(name="following",
+     *                joinColumns={
+     *                      @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *                    },
+     *                inverseJoinColumns={
+     *                      @ORM\JoinColumn(name="following_user_id", referencedColumnName="id")
+     *                })
+     */
+    private $following;
+
 
     /**
      * User constructor.
@@ -76,6 +102,8 @@ class User implements UserInterface, \Serializable
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+      //  $this->followers = new ArrayCollection();
+      //   $this->following = new ArrayCollection();
     }
 
 
@@ -135,6 +163,22 @@ class User implements UserInterface, \Serializable
     /**
      * @return mixed
      */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getPosts()
     {
         return $this->posts;
@@ -158,6 +202,45 @@ class User implements UserInterface, \Serializable
     }
 
 
+    /**
+     * @return mixed
+     */
+    /**
+    public function getFollowers()
+    {
+        return $this->followers;
+    }
+     */
+
+    /**
+     * @param mixed $followers
+     */
+    /**
+    public function setFollowers($followers): void
+    {
+        $this->followers = $followers;
+    }
+     */  
+
+    /**
+     * @return mixed
+     */
+    /**
+    public function getFollowing()
+    {
+        return $this->following;
+    }
+     */
+
+    /**
+     * @param mixed $following
+     */
+    /**
+    public function setFollowing($following): void
+    {
+        $this->following = $following;
+    }
+     * */
 
     /**
      * Returns the roles granted to the user.

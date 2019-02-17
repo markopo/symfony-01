@@ -65,7 +65,7 @@ class RegisterController extends AbstractController
             $userRegisterEvent = new UserRegisterEvent($user);
             $this->eventDispatcher->dispatch(UserRegisterEvent::NAME, $userRegisterEvent);
 
-            $indexRoute = $this->router->generate('books');
+            $indexRoute = $this->router->generate('micro_post_index');
             return new RedirectResponse($indexRoute);
         }
 

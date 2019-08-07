@@ -13,7 +13,7 @@ class TokenGeneratorTest extends TestCase {
 
             $tokenGenerator = new TokenGenerator();
             $token = $tokenGenerator->getRandomSecureToken(30);
-            
+
             $tokenLen = strlen($token);
             $this->assertTrue($tokenLen === 30, 'Same size is not OK!');
 

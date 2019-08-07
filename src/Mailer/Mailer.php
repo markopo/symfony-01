@@ -8,6 +8,8 @@
 
 namespace App\Mailer;
 
+use App\Entity\User;
+
 
 class Mailer
 {

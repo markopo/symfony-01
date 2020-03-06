@@ -9,6 +9,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -32,5 +33,15 @@ class HomeController  extends AbstractController
 
 
       return $this->render('base.html.twig', [ 'message' => 'Welcome to Home Page!' ]);
+    }
+
+    /**
+     * @Route("/jsondate", name="home_jsondate")
+     */
+    public function jsonDate() {
+
+        return new JsonResponse([
+            'date' => date('Y-m-d H:i:s')
+        ]);
     }
 }

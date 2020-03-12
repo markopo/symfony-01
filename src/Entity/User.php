@@ -97,6 +97,38 @@ class User implements UserInterface, \Serializable
      */
     private $following;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="author")
+     */
+    private $blogposts;
+
+    public function getBlogposts()
+    {
+        return $this->blogposts;
+    }
+
+    public function setBlogposts($blogposts): self
+    {
+        $this->blogposts = $blogposts;
+        return $this;
+    }
+
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    public function setComments($comments): self
+    {
+        $this->comments = $comments;
+        return $this;
+    }
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author")
+     */
+    private $comments;
+
 
     /**
      * User constructor.

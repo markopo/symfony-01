@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -19,6 +20,8 @@ class User implements UserInterface, \Serializable
 {
     const ROLE_USER = 'ROLE_USER';
     const ROLE_ADMIN = 'ROLE_ADMIN';
+
+
 
     /**
      * @ORM\Id()
@@ -102,28 +105,6 @@ class User implements UserInterface, \Serializable
      */
     private $blogposts;
 
-    public function getBlogposts()
-    {
-        return $this->blogposts;
-    }
-
-    public function setBlogposts($blogposts): self
-    {
-        $this->blogposts = $blogposts;
-        return $this;
-    }
-
-    public function getComments()
-    {
-        return $this->comments;
-    }
-
-    public function setComments($comments): self
-    {
-        $this->comments = $comments;
-        return $this;
-    }
-
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author")
      */
@@ -140,6 +121,9 @@ class User implements UserInterface, \Serializable
       //  $this->followers = new ArrayCollection();
       //   $this->following = new ArrayCollection();
         $this->description = 'Registered: '. date('Y-m-d H:i:s'). ' Name: '.  $this->getFullName();
+
+        $this->blogposts = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
 
@@ -213,7 +197,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
     public function getPosts()
     {
@@ -235,6 +219,34 @@ class User implements UserInterface, \Serializable
     public function setPlainPassword($plainPassword): void
     {
         $this->plainPassword = $plainPassword;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getBlogposts(): Collection
+    {
+        return $this->blogposts;
+    }
+
+    public function setBlogposts($blogposts): self
+    {
+        $this->blogposts = $blogposts;
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function setComments($comments): self
+    {
+        $this->comments = $comments;
+        return $this;
     }
 
 

@@ -34,7 +34,7 @@ class BlogPost
     private $text;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="blogposts")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
@@ -42,12 +42,16 @@ class BlogPost
     /**
      * @return User
      */
-    public function getAuthor()
+    public function getAuthor(): User
     {
         return $this->author;
     }
 
-    public function setAuthor($author): self
+    /**
+     * @param User $author
+     * @return $this
+     */
+    public function setAuthor(User $author): self
     {
         $this->author = $author;
         return $this;

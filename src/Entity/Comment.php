@@ -27,7 +27,7 @@ class Comment
     private $published;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
@@ -35,12 +35,16 @@ class Comment
     /**
      * @return User
      */
-    public function getAuthor()
+    public function getAuthor(): User
     {
         return $this->author;
     }
 
-    public function setAuthor($author): self
+    /**
+     * @param User $author
+     * @return $this
+     */
+    public function setAuthor(User $author): self
     {
         $this->author = $author;
         return $this;

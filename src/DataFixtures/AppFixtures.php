@@ -2,8 +2,11 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Comment;
 use App\Entity\MicroPost;
 use App\Entity\User;
+use App\Entity\BlogPost;
+use Cocur\Slugify\Slugify;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Faker;
@@ -20,10 +23,16 @@ class AppFixtures extends Fixture
 
     private $numberOfUsers = 20;
 
+    private $slugify;
+
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
 
         $this->passwordEncoder = $passwordEncoder;
+
+        $this->faker = Faker\Factory::create();
+
+        $this->slugify = new Slugify();
     }
 
 
@@ -32,11 +41,11 @@ class AppFixtures extends Fixture
         // $product = new Product();
         // $manager->persist($product);
 
-        $this->faker = Faker\Factory::create();
-
         $this->loadUsers($manager);
 
         $this->loadMicroPosts($manager);
+
+        $this->loadBlogPosts($manager);
 
         $manager->flush();
     }
@@ -75,7 +84,7 @@ class AppFixtures extends Fixture
 
     private function loadMicroPosts(ObjectManager $manager): void {
 
-        for($i=0;$i< 300;$i++){
+        for($i = 0; $i < 20; $i++){
             $mp = new MicroPost();
             $mp->setText($this->faker->paragraph(rand(5, 30)));
             $now = new \DateTime($this->threePrevYear());
@@ -90,6 +99,44 @@ class AppFixtures extends Fixture
         }
 
     }
+
+    private function loadBlogPosts(ObjectManager $manager) {
+
+        for($i = 0; $i < 20; $i++) {
+
+            $title = $this->faker->sentence;
+            $slug = $this->slugify->slugify($title);
+
+            $author = $this->getReference($this->randomUserStr());
+
+            $blogPost = new BlogPost();
+
+            $blogPost->setAuthor($author);
+            $blogPost->setTitle($title);
+            $blogPost->setSlug($slug);
+            $blogPost->setPublished(new \DateTime());
+            $blogPost->setText($this->faker->text);
+
+            $manager->persist($blogPost);
+
+            $randomNrComments = rand(1, 5);
+
+            for($j = 0; $j < $randomNrComments; $j++) {
+
+                 $comment = new Comment();
+                 $randAuthor = $this->getReference($this->randomUserStr());
+                 $comment->setAuthor($randAuthor);
+                 $comment->setPublished(new \DateTime());
+                 $comment->setContent($this->faker->text);
+                 $comment->setBlogPost($blogPost);
+                 $manager->persist($comment);
+            }
+
+
+        }
+
+    }
+
 
     private function randomUserStr(): string {
         $random = rand(0, $this->numberOfUsers-1);

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 
@@ -33,11 +34,41 @@ class BlogPost
      */
     private $text;
 
+
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="blogposts")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="blogPost")
+     */
+    private $comments;
+
+
+    /**
+     * @return string
+     */
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     * @return $this
+     */
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+        return $this;
+    }
 
     /**
      * @return User
@@ -95,6 +126,20 @@ class BlogPost
     {
         $this->text = $text;
 
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function setComments($comments): self
+    {
+        $this->comments = $comments;
         return $this;
     }
 }

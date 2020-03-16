@@ -19,6 +19,9 @@
     "behat/transliterator": {
         "version": "v1.2.0"
     },
+    "cocur/slugify": {
+        "version": "v4.0.0"
+    },
     "cron/cron": {
         "version": "1.3.0"
     },

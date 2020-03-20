@@ -8,13 +8,20 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields="email", message="This e-mail is already used.")
  * @UniqueEntity(fields="username", message="This username is already used.")
- * @ApiResource()
+ * @ApiResource(
+ *     itemOperations={"get"},
+ *     collectionOperations={"get"},
+ *     normalizationContext={
+            "groups"={"read"}
+ *     }
+ * )
  */
 class User implements UserInterface, \Serializable
 {
@@ -27,6 +34,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $id;
 
@@ -34,6 +42,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=50, unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(min=5, max=50)
+     * @Groups({"read"})
      */
     private $username;
 
@@ -53,6 +62,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(min=4, max=50)
+     * @Groups({"read"})
      */
     private $fullName;
 
@@ -66,25 +76,29 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank()
      * @Assert\Email()
+     * @Groups({"read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"read"})
      */
     private $description;
 
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\MicroPost", mappedBy="user")
+     * @Groups({"read"})
      */
-   // private $posts;
+    private $posts;
 
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="following")
+     * @Groups({"read"})
      */
-  //  private $followers;
+    private $followers;
 
 
 
@@ -97,16 +111,19 @@ class User implements UserInterface, \Serializable
      *                inverseJoinColumns={
      *                      @ORM\JoinColumn(name="following_user_id", referencedColumnName="id")
      *                })
+     * @Groups({"read"})
      */
     private $following;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="author")
+     * @Groups({"read"})
      */
     private $blogposts;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author")
+     * @Groups({"read"})
      */
     private $comments;
 

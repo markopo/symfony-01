@@ -33,7 +33,7 @@
         "symfony/web-link": "4.4.*",
         "symfony/webpack-encore-bundle": "^1.0",
         "symfony/yaml": "4.4.*",
-        "tightenco/collect": "^5.7",
+        "tightenco/collect": "^7.2",
         "vich/uploader-bundle": "^1.8"
     },
     "require-dev": {

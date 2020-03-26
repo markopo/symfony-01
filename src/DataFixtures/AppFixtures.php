@@ -102,7 +102,7 @@ class AppFixtures extends Fixture
 
     private function loadBlogPosts(ObjectManager $manager) {
 
-        for($i = 0; $i < 20; $i++) {
+        for($i = 0; $i < 100; $i++) {
 
             $title = $this->faker->sentence;
             $slug = $this->slugify->slugify($title);
@@ -114,7 +114,7 @@ class AppFixtures extends Fixture
             $blogPost->setAuthor($author);
             $blogPost->setTitle($title);
             $blogPost->setSlug($slug);
-            $blogPost->setPublished(new \DateTime());
+            $blogPost->setPublished($this->faker->dateTimeBetween('-5 years', 'now'));
             $blogPost->setText($this->faker->text);
 
             $manager->persist($blogPost);
@@ -126,7 +126,7 @@ class AppFixtures extends Fixture
                  $comment = new Comment();
                  $randAuthor = $this->getReference($this->randomUserStr());
                  $comment->setAuthor($randAuthor);
-                 $comment->setPublished(new \DateTime());
+                 $comment->setPublished($this->faker->dateTimeBetween('-2 years', 'now'));
                  $comment->setContent($this->faker->text);
                  $comment->setBlogPost($blogPost);
                  $manager->persist($comment);

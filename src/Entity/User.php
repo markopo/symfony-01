@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity(fields="username", message="This username is already used.")
  * @ApiResource(
  *     itemOperations={"get"},
- *     collectionOperations={"get"},
+ *     collectionOperations={"get","post"},
  *     normalizationContext={
             "groups"={"read"}
  *     }
@@ -216,7 +216,7 @@ class User implements UserInterface, \Serializable
     /**
      * @return Collection
      */
-    public function getPosts()
+    public function getPosts(): Collection
     {
         return $this->posts;
     }

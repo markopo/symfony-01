@@ -10,6 +10,17 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api:
+            pattern: ^/api
+            stateless: true
+            anonymous: true
+            json_login:
+                check_path: /api/login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
         main:
             anonymous: true
             pattern: ^/
@@ -24,15 +35,15 @@ security:
             # https://symfony.com/doc/current/security/form_login_setup.html
 
             form_login:
-                check_path: security_login
-                login_path: security_login
-                csrf_token_generator: security.csrf.token_manager
-                default_target_path: micro_post_index
-                use_referer: true
-              #  username_parameter: _username
-              #  password_parameter: _password
-              #  failure_path:
-              #  always_use_default_target_path: false
+             #    check_path: security_login
+             #    login_path: security_login
+             #    csrf_token_generator: security.csrf.token_manager
+             #    default_target_path: micro_post_index
+             #    use_referer: true
+             #  username_parameter: _username
+             #  password_parameter: _password
+             #  failure_path:
+             #  always_use_default_target_path: false
             logout:
                 path: security_logout
                 target: micro_post_index
@@ -41,6 +52,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/easyadmin, roles: ROLE_ADMIN }
+        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONUMOUSLY  }
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         #   - { path: ^/micro-post, roles: ROLE_USER }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

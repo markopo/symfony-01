@@ -16,7 +16,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity(fields="email", message="This e-mail is already used.")
  * @UniqueEntity(fields="username", message="This username is already used.")
  * @ApiResource(
- *     itemOperations={"get"},
+ *     itemOperations={
+ *     "get"={
+ *          "access_control"="is_granted('IS_AUTHENTICATED_FULLY')"
+*          }
+ *      },
  *     collectionOperations={"get","post"},
  *     normalizationContext={
             "groups"={"read"}

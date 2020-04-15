@@ -25,14 +25,14 @@ class AppFixtures extends Fixture
 
     private $slugify;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, Slugify $slugify)
     {
 
         $this->passwordEncoder = $passwordEncoder;
 
         $this->faker = Faker\Factory::create();
 
-        $this->slugify = new Slugify();
+        $this->slugify = $slugify;
     }
 
 

@@ -6,13 +6,13 @@ namespace App\EventSubscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\BlogPost;
-use http\Env\Request;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Cocur\Slugify\Slugify;
+use Symfony\Component\HttpFoundation\Request;
 
 
 class AuthoredEntitySubscriber implements EventSubscriberInterface
@@ -52,7 +52,7 @@ class AuthoredEntitySubscriber implements EventSubscriberInterface
         /** @var UserInterface $author */
         $author = $this->tokenStorage->getToken()->getUser();
 
-        if (!$entity instanceof BlogPost || \Symfony\Component\HttpFoundation\Request::METHOD_POST !== $method) {
+        if (!$entity instanceof BlogPost || Request::METHOD_POST !== $method) {
             return;
         }
 

@@ -19,7 +19,7 @@ class AuthoredEntitySubscriber implements EventSubscriberInterface
 {
 
     /**
-     * @var TokenStorageInterface
+     * @var TokenStorageInterface|
      */
     private TokenStorageInterface $tokenStorage;
     /**

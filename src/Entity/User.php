@@ -16,16 +16,27 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity(fields="email", message="This e-mail is already used.")
  * @UniqueEntity(fields="username", message="This username is already used.")
  * @ApiResource(
+ *     normalizationContext={"groups"={"get"}},
  *     itemOperations={
- *     "get"={
- *          "access_control"="is_granted('IS_AUTHENTICATED_FULLY')"
-*          }
- *      },
- *     collectionOperations={"get","post"},
- *     normalizationContext={
-            "groups"={"read"}
- *     }
- * )
+ *      "get"={
+ *          "access_control"="is_granted('IS_AUTHENTICATED_FULLY')",
+ *           "normalization_context"={"groups"={"get"}}
+ *          },
+ *      "put"={
+ *          "access_control"="is_granted('IS_AUTHENTICATED_FULLY') and object == user",
+ *           "denormalization_context"={
+ *               "groups"={"put"}
+ *              }
+ *           }
+ *     },
+ *     collectionOperations={
+ *         "post"={
+ *              "denormalization_context"={
+ *                  "groups"="post"
+ *              }
+ *           }
+ *     },
+ *     )
  */
 class User implements UserInterface, \Serializable
 {
@@ -38,7 +49,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"read"})
+     * @Groups({"get"})
      */
     private $id;
 
@@ -46,7 +57,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=50, unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(min=5, max=50)
-     * @Groups({"read"})
+     * @Groups({"get", "post"})
      */
     private $username;
 
@@ -58,6 +69,7 @@ class User implements UserInterface, \Serializable
     /**
      * @Assert\NotBlank()
      * @Assert\Length(min=8, max=4096)
+     * @Groups({"put", "post"})
      */
     private $plainPassword;
 
@@ -66,7 +78,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(min=4, max=50)
-     * @Groups({"read"})
+     * @Groups({"get", "post", "put"})
      */
     private $fullName;
 
@@ -80,27 +92,27 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank()
      * @Assert\Email()
-     * @Groups({"read"})
+     * @Groups({"get", "post", "put"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"read"})
+     * @Groups({"get", "post", "put"})
      */
     private $description;
 
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\MicroPost", mappedBy="user")
-     * @Groups({"read"})
+     * @Groups({"get"})
      */
     private $posts;
 
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="following")
-     * @Groups({"read"})
+     * @Groups({"get"})
      */
     private $followers;
 
@@ -115,19 +127,19 @@ class User implements UserInterface, \Serializable
      *                inverseJoinColumns={
      *                      @ORM\JoinColumn(name="following_user_id", referencedColumnName="id")
      *                })
-     * @Groups({"read"})
+     * @Groups({"get"})
      */
     private $following;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="author")
-     * @Groups({"read"})
+     * @Groups({"get"})
      */
     private $blogposts;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author")
-     * @Groups({"read"})
+     * @Groups({"get"})
      */
     private $comments;
 

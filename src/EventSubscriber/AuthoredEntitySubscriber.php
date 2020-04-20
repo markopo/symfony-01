@@ -10,6 +10,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Cocur\Slugify\Slugify;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,8 +50,15 @@ class AuthoredEntitySubscriber implements EventSubscriberInterface
         $entity = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
+        if(null === $token) {
+            return;
+        }
+
         /** @var UserInterface $author */
-        $author = $this->tokenStorage->getToken()->getUser();
+        $author = $token->getUser();
 
         $isAllowedHttpMethod = Request::METHOD_POST === $method || Request::METHOD_PUT === $method;
 

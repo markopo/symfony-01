@@ -41,6 +41,15 @@ class AuthoredEntitySubscriberTest extends TestCase
         (new AuthoredEntitySubscriber($tokenStorageMock, $slugifyMock))->getAuthenticatedUser($eventMock);
     }
 
+    public function testNoTokenPresent() {
+        $tokenStorageMock = $this->getTokenStorageMock(false);
+        $slugifyMock = $this->getSlugifyMock(false);
+
+        $eventMock = $this->getMockObject('POST', new class {});
+        (new AuthoredEntitySubscriber($tokenStorageMock, $slugifyMock))->getAuthenticatedUser($eventMock);
+    }
+
+
     public function providerSetAuthorCall(): array
     {
         return [
@@ -69,12 +78,12 @@ class AuthoredEntitySubscriberTest extends TestCase
      * @param $entityMock
      * @return MockObject
      */
-    private function getTokenStorageMock(): MockObject
+    private function getTokenStorageMock(bool $hasToken = true): MockObject
     {
         $tokenMock = $this->getMockBuilder(TokenInterface::class)
             ->getMockForAbstractClass();
 
-        $tokenMock->expects($this->once())
+        $tokenMock->expects($hasToken ? $this->once() : $this->never())
             ->method('getUser')
             ->willReturn(new User());
 
@@ -83,7 +92,7 @@ class AuthoredEntitySubscriberTest extends TestCase
 
         $tokenStorageMock->expects($this->once())
             ->method('getToken')
-            ->willReturn($tokenMock);
+            ->willReturn($hasToken ? $tokenMock : null);
         return $tokenStorageMock;
     }
 

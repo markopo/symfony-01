@@ -1,0 +1,23 @@
+# Rename to behat.yml - local configuration
+
+default:
+    suites:
+        default:
+            contexts:
+                - FeatureContext:
+                    kernel: '@kernel'
+                - Behat\MinkExtension\Context\MinkContext
+                - behatch:context:json
+
+
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: features/bootstrap/bootstrap.php
+                class: App\Kernel
+        Behatch\Extension: ~
+        Behat\MinkExtension:
+            base_url: 'http://symfony-01.local'
+            sessions:
+                default:
+                    symfony: ~

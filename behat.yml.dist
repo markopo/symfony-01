@@ -5,6 +5,7 @@ default:
                 - FeatureContext:
                     kernel: '@kernel'
 
+
     extensions:
         Behat\Symfony2Extension:
             kernel:

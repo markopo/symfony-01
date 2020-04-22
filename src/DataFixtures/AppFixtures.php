@@ -62,7 +62,7 @@ class AppFixtures extends Fixture
                 $email = mb_strtolower($fName.'_'.$lName).'@gmail.com';
 
                 $user->setEmail($email);
-                $user->setUsername($userName);
+                $user->setUsername($i === 0 ? 'admin' : $userName);
                 $user->setFullName($fullName);
 
                 $roles = [ User::ROLE_USER ];

@@ -4,6 +4,7 @@ use Behat\Behat\Context\Context;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Doctrine\ORM\Tools\SchemaTool;
 
 /**
  * This context class contains the definitions of the steps used by the demo
@@ -11,38 +12,101 @@ use Symfony\Component\HttpKernel\KernelInterface;
  *
  * @see http://behat.org/en/latest/quick_start.html
  */
-class FeatureContext implements Context
+class FeatureContext extends \Behatch\Context\RestContext
 {
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
+    const USERS = [
+        'admin' => 'admin123'
+    ];
+
+    const AUTH_URL = '/api/login_check';
+
+    const AUTH_JSON = '{
+                "username": "%s",
+                "password": "%s"
+            }';
 
     /**
-     * @var Response|null
+     * @var \App\DataFixtures\AppFixtures
      */
-    private $response;
+    private $fixtures;
 
-    public function __construct(KernelInterface $kernel)
+    /**
+     * @var \Coduo\PHPMatcher\Matcher
+     */
+    private $matcher;
+
+    /**
+     * @var \Doctrine\ORM\EntityManagerInterface
+     */
+    private \Doctrine\ORM\EntityManagerInterface $em;
+
+    public function __construct(
+        \Behatch\HttpCall\Request $request,
+        \App\DataFixtures\AppFixtures $fixtures,
+        \Doctrine\ORM\EntityManagerInterface $em)
     {
-        $this->kernel = $kernel;
+        parent::__construct($request);
+        $this->fixtures = $fixtures;
+        $this->matcher = (new \Coduo\PHPMatcher\Factory\MatcherFactory)->createMatcher();
+        $this->em = $em;
     }
 
     /**
-     * @When a demo scenario sends a request to :path
+     * @BeforeScenario @createSchema
      */
-    public function aDemoScenarioSendsARequestTo(string $path)
-    {
-        $this->response = $this->kernel->handle(Request::create($path, 'GET'));
+    public function createSchema() {
+
+        // Get entity metadata
+        $classes = $this->em->getMetadataFactory()->getAllMetadata();
+
+        // Drop and create schema
+        $schemaTool = new SchemaTool($this->em);
+        $schemaTool->dropSchema($classes);
+        $schemaTool->createSchema($classes);
+
+        // Load fixtures ..and execute
+        $purger = new \Doctrine\Common\DataFixtures\Purger\ORMPurger($this->em);
+        $fixturesExecutor = new \Doctrine\Common\DataFixtures\Executor\ORMExecutor($this->em, $purger);
+        $fixturesExecutor->execute([
+            $this->fixtures
+        ]);
     }
 
     /**
-     * @Then the response should be received
+     * @Given I am authenticated as :user
      */
-    public function theResponseShouldBeReceived()
+    public function iAmAuthenticatedAs($user)
     {
-        if ($this->response === null) {
-            throw new \RuntimeException('No response received');
-        }
+       $this->request->setHttpHeader('Content-Type', 'application/ld+json');
+       $this->request->send(
+           'POST',
+           $this->locatePath(self::AUTH_URL),
+           [],
+           [],
+           sprintf(self::AUTH_JSON, $user, self::USERS[$user])
+       );
+
+       $json = json_decode($this->request->getContent(), true);
+       // make sure the token was returned
+       $this->assertTrue(isset($json['token']));
+
+       $token = $json['token'];
+       $this->request->setHttpHeader('Authorization', 'Bearer '.$token);
     }
+
+//    /**
+//     * @When a demo scenario sends a request to :arg1
+//     */
+//    public function aDemoScenarioSendsARequestTo($arg1)
+//    {
+//        throw new PendingException();
+//    }
+//
+//    /**
+//     * @Then the response should be received
+//     */
+//    public function theResponseShouldBeReceived()
+//    {
+//        throw new PendingException();
+//    }
 }

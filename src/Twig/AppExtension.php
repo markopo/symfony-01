@@ -23,8 +23,9 @@ class AppExtension extends AbstractExtension implements GlobalsInterface
 
     /**
      * AppExtension constructor.
+     * @param string $locale
      */
-    public function __construct(string $locale)
+    public function __construct(string $locale = 'en')
     {
 
         $this->locale = $locale;
@@ -39,7 +40,7 @@ class AppExtension extends AbstractExtension implements GlobalsInterface
         ];
     }
 
-    public function getGlobals() {
+    public function getGlobals(): array {
         return [
             'locale' => $this->locale
         ];

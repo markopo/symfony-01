@@ -49,7 +49,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"get"})
+     * @Groups({"get", "get-blog-post-with-author"})
      */
     private $id;
 
@@ -57,7 +57,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=50, unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(min=5, max=50)
-     * @Groups({"get", "post"})
+     * @Groups({"get", "post", "get-blog-post-with-author"})
      */
     private $username;
 
@@ -78,7 +78,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(min=4, max=50)
-     * @Groups({"get", "post", "put"})
+     * @Groups({"get", "post", "put", "get-blog-post-with-author"})
      */
     private $fullName;
 

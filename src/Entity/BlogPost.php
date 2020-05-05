@@ -163,4 +163,25 @@ class BlogPost
         $this->comments = $comments;
         return $this;
     }
+
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->slug
+        ]);
+    }
+
+
+
+    public function unserialize($serialized)
+    {
+        list($this->id,
+            $this->slug) = unserialize($serialized);
+    }
+
+    public function __toString()
+    {
+        return 'blogpost: '. $this->getId().' '. $this->getSlug();
+    }
 }

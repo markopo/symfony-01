@@ -8,7 +8,7 @@
         "api-platform/api-pack": "^1.2",
         "cocur/slugify": "^4.0",
         "cron/cron-bundle": "^2.0",
-        "easycorp/easyadmin-bundle": "^2.0",
+        "easycorp/easyadmin-bundle": "^2.3.7",
         "fabpot/goutte": "^3.2",
         "fzaninotto/faker": "^1.9",
         "lexik/jwt-authentication-bundle": "^2.6",
@@ -49,8 +49,7 @@
         "symfony/debug-pack": "*",
         "symfony/phpunit-bridge": "^4.3",
         "symfony/profiler-pack": "*",
-        "symfony/test-pack": "*",
-        "symfony/web-server-bundle": "4.2.*"
+        "symfony/test-pack": "*"
     },
     "config": {
         "preferred-install": {

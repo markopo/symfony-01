@@ -107,4 +107,23 @@ class Comment
 
         return $this;
     }
+
+    public function serialize()
+    {
+        return serialize([
+            $this->id
+        ]);
+    }
+
+
+
+    public function unserialize($serialized)
+    {
+        list($this->id) = unserialize($serialized);
+    }
+
+    public function __toString()
+    {
+        return 'comment: '. $this->getId();
+    }
 }

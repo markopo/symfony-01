@@ -9,6 +9,7 @@
 namespace App\Mailer;
 
 use App\Entity\User;
+use Twig\Environment;
 
 
 class Mailer
@@ -22,7 +23,7 @@ class Mailer
      */
     private $twig;
 
-    public function __construct(\Swift_Mailer $mailer, \Twig_Environment $twig)
+    public function __construct(\Swift_Mailer $mailer, Environment $twig)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;

@@ -34,3 +34,4 @@ services:
     App\Service\Greeting:
         arguments:
             $message: 'Hello from service'
+

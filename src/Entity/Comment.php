@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
@@ -19,16 +20,19 @@ class Comment
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"get-blog-post-with-author"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"get-blog-post-with-author"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"get-blog-post-with-author"})
      */
     private $published;
 
@@ -58,6 +62,7 @@ class Comment
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"get-blog-post-with-author"})
      */
     private $author;
 
